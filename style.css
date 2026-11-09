@@ -1,0 +1,397 @@
+/* =====================================================================
+   ROTEIRO DE BOLSO — style.css (VERSÃO COMENTADA)
+   ---------------------------------------------------------------------
+   Este arquivo controla a APARÊNCIA. Ele não tem lógica; o JS só
+   liga/desliga classes (ex.: .hidden, .aberto, .ativa) e o CSS reage.
+
+   ÍNDICE:
+    1. Variáveis de cor (:root) e reset
+    2. Navbar (cabeçalho)
+    3. Painel central de busca
+    4. Formulário de busca e sugestão ortográfica
+    5. Grid de resultados e cards
+    6. Lista salva (parte de baixo) e filtros
+    7. Modal (janela de detalhes)
+    8. Botões (primário, perigo) e rodapé
+    9. Responsivo (celular)
+   10. Botão de trailer e botões de compra de livros
+   11. Salas e chat
+   12. Logo clicável
+   13. Botão flutuante e painel lateral
+   14. Temas (filmes = verde / livros = laranja) e animações das abas
+   ===================================================================== */
+
+
+/* ================= 1. VARIÁVEIS E RESET ================= */
+/* :root define "variáveis CSS". Use com var(--nome).
+   Mudou a cor aqui = muda no site inteiro. */
+:root {
+  --bg-color: #0b0c10;       /* fundo da página */
+  --panel-bg: #15161e;       /* fundo de painéis/modais */
+  --text-main: #f3f4f6;      /* texto principal */
+  --text-muted: #9ca3af;     /* texto secundário (cinza) */
+  --primary: #00e599;        /* cor de destaque (verde). É sobrescrita pelo tema na seção 14 */
+  --primary-hover: #00c27f;  /* destaque ao passar o mouse */
+  --secondary: #2dd4bf;
+  --danger: #ef4444;         /* vermelho (excluir, erros) */
+  --danger-hover: #dc2626;
+  --border-color: #272732;   /* bordas */
+  --input-bg: #1f2029;       /* fundo de campos e cards */
+}
+
+/* RESET: remove margens/espaços padrão do navegador.
+   box-sizing: border-box faz padding e borda ficarem DENTRO da largura definida. */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* O body é uma coluna flex com altura mínima da tela.
+   Isso permite "empurrar" a lista salva e o rodapé para baixo. */
+body {
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+
+/* ================= 2. NAVBAR ================= */
+.navbar {
+  background-color: #000;
+  padding: 15px 30px;
+  border-bottom: 1px solid var(--border-color);
+}
+/* Centraliza o conteúdo com largura máxima e coloca logo + subtítulo lado a lado */
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.logo {
+  font-size: 1.5rem;
+  color: #fff; /* substituída pela cor do tema na seção 14 */
+}
+.logo span { color: var(--primary); }
+/* Subtítulo com uma linha vertical à esquerda */
+.subtitle {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  border-left: 1px solid var(--border-color);
+  padding-left: 15px;
+}
+
+
+/* ================= 3. PAINEL CENTRAL (BUSCA) ================= */
+/* flex: 1 faz esta área ocupar o espaço livre da tela */
+.main-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+/* A "caixa" onde ficam título, abas, campo de busca e resultados */
+.panel-box {
+  background-color: var(--panel-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 40px;
+  width: 100%;
+  max-width: 900px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  text-align: center;
+}
+
+.hero-text h2 {
+  font-size: 2.2rem;
+  margin-bottom: 10px;
+}
+.hero-text span { color: var(--primary); } /* palavra "entretenimento" colorida */
+.hero-text p { color: var(--text-muted); margin-bottom: 30px; }
+
+
+/* ================= 4. FORMULÁRIO DE BUSCA ================= */
+/* A barra de busca arredondada (campo + botão dentro de uma "pílula") */
+.search-wrapper {
+  display: flex;
+  gap: 10px;
+  background: var(--bg-color);
+  padding: 8px;
+  border-radius: 50px;
+  border: 1px solid var(--border-color);
+}
+
+/* Campo sem borda própria (a borda é da pílula) */
+.search-wrapper input, .search-wrapper select {
+  background: transparent;
+  border: none;
+  color: var(--text-main);
+  padding: 12px 20px;
+  outline: none;
+}
+.search-wrapper input { flex: 2; }
+
+/* Deixa as opções dos <select> escuras (senão ficam brancas no tema escuro) */
+select option {
+  background-color: var(--panel-bg); /* Fundo escuro */
+  color: var(--text-main); /* Texto claro */
+}
+
+.btn-search {
+  background-color: var(--primary);
+  color: #fff; /* sobrescrito para texto escuro na seção 14 */
+  border: none;
+  padding: 12px 30px;
+  border-radius: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.btn-search:hover { background-color: var(--primary-hover); }
+
+/* Sugestão Ortográfica ("Você quis dizer: ...") */
+#sugestao-ortografica {
+  margin-top: 15px;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+.sugestao-link {
+  color: var(--primary);
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: 0.2s;
+}
+.sugestao-link:hover {
+  color: var(--primary-hover);
+}
+
+
+/* ================= 5. GRID DE RESULTADOS E CARDS ================= */
+/* auto-fill + minmax: cria quantas colunas de pelo menos 180px couberem.
+   Responsivo sem precisar de media query. Serve para resultados E lista salva. */
+.grid-resultados, .grid-salvos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+  margin-top: 30px;
+  text-align: left;
+}
+
+/* CARDS (filmes/livros) */
+.card {
+  background: var(--input-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s, border-color 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+/* Efeito ao passar o mouse: sobe 5px e a borda ganha a cor do tema */
+.card:hover {
+  transform: translateY(-5px);
+  border-color: var(--primary);
+}
+.card img { width: 100%; height: 260px; object-fit: cover; } /* cover = recorta sem deformar */
+.card-body { padding: 15px; display: flex; flex-direction: column; flex: 1; }
+.card-title { font-size: 1rem; margin-bottom: 8px; font-weight: 600; }
+/* "Etiquetas" (ano, gênero) */
+.badge { background: #2a2b36; color: var(--text-muted); padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; margin-right: 5px; display: inline-block;}
+/* Etiqueta de status (roxa) no card salvo; margin-top:auto a empurra para o fim do card */
+.status-badge { margin-top: auto; background: rgba(139, 92, 246, 0.2); color: #c4b5fd; text-align: center; padding: 6px; border-radius: 6px;}
+
+
+/* ================= 6. LISTA SALVA (PARTE INFERIOR) ================= */
+.bottom-list-section {
+  background-color: #0f1015;
+  border-top: 2px solid var(--border-color);
+  padding: 40px 20px;
+  margin-top: auto; /* Empurra para o fundo */
+}
+.list-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+/* Título à esquerda, filtros à direita; flex-wrap quebra linha em telas pequenas */
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 25px;
+  gap: 20px;
+}
+.filters-form {
+  display: flex;
+  gap: 10px;
+}
+.filters-form select, .filters-form input {
+  background: var(--input-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 10px 15px;
+  border-radius: 8px;
+  outline: none;
+}
+
+.msg-empty { color: var(--text-muted); text-align: center; padding: 20px; }
+
+
+/* ================= 7. MODAL ================= */
+/* .modal = fundo escuro que cobre a tela toda (position: fixed) e centraliza a caixa.
+   z-index alto = fica acima de todo o resto. */
+.modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
+/* .hidden = esconde. O !important garante que vença qualquer outro "display".
+   O JS usa classList.add/remove('hidden') para mostrar/esconder QUASE tudo no site. */
+.hidden { display: none !important; }
+/* A caixa do modal (com scroll interno se passar de 90% da altura da tela) */
+.dark-modal { background: var(--panel-bg); padding: 30px; border-radius: 16px; border: 1px solid var(--border-color); width: 100%; max-width: 800px; max-height: 90vh; overflow-y: auto; position: relative; }
+.close-btn { position: absolute; top: 15px; right: 20px; font-size: 1.8rem; cursor: pointer; color: var(--text-muted); }
+.close-btn:hover { color: #fff; }
+
+/* Layout interno: mídia (esquerda) e detalhes (direita) */
+.modal-layout { display: flex; gap: 30px; flex-wrap: wrap; }
+.modal-media { flex: 1; min-width: 250px; }
+.modal-media img { width: 100%; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+.trailer-box { margin-top: 15px; background: #000; border-radius: 8px; overflow: hidden;}
+.trailer-box h3 { font-size: 0.9rem; padding: 10px; background: var(--input-bg); color: var(--text-muted); }
+
+/* flex: 2 = a coluna de detalhes é 2x mais larga que a da mídia */
+.modal-details { flex: 2; min-width: 300px; display: flex; flex-direction: column; gap: 15px; }
+.modal-details h2 { font-size: 2rem; color: #fff; }
+/* Sinopse com altura máxima e scroll próprio (sinopses longas) */
+.sinopse { font-size: 0.95rem; color: var(--text-muted); line-height: 1.5; max-height: 150px; overflow-y: auto; }
+
+/* Formulário do modal */
+.form-salvar { display: flex; flex-direction: column; gap: 15px; margin-top: 10px; }
+.input-group { display: flex; flex-direction: column; gap: 5px; }
+.input-group label { font-size: 0.85rem; color: var(--text-muted); }
+.input-group select, .input-group textarea { background: var(--input-bg); border: 1px solid var(--border-color); color: #fff; padding: 12px; border-radius: 8px; outline: none; }
+
+/* ================= 8. BOTÕES E RODAPÉ ================= */
+.modal-actions { display: flex; gap: 10px; margin-top: 10px; }
+.btn-primary { background: var(--primary); color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; flex: 1; transition: 0.3s;}
+.btn-primary:hover { background: var(--primary-hover); }
+/* Botão de excluir: contorno vermelho; no hover preenche */
+.btn-danger { background: transparent; border: 1px solid var(--danger); color: var(--danger); padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s;}
+.btn-danger:hover { background: var(--danger); color: #fff; }
+
+footer { background: #000; text-align: center; padding: 20px; font-size: 0.8rem; color: var(--text-muted); }
+
+
+/* ================= 9. RESPONSIVO (CELULAR) ================= */
+/* Em telas com até 768px: busca vira coluna e o modal empilha mídia + detalhes */
+@media (max-width: 768px) {
+  .search-wrapper { flex-direction: column; border-radius: 12px; padding: 15px; background: transparent; border: none; }
+  .search-wrapper input, .search-wrapper select { border: 1px solid var(--border-color); border-radius: 8px; }
+  .modal-layout { flex-direction: column; }
+}
+
+
+/* ================= 10. BOTÃO DE TRAILER E COMPRA DE LIVROS ================= */
+/* BOTÃO DE TRAILER (YouTube) — link vermelho dentro do modal */
+.btn-trailer { display: block; margin-top: 12px; text-align: center; text-decoration: none; background: #ef4444; color: #fff; padding: 12px; border-radius: 8px; font-weight: bold; transition: 0.3s; }
+.btn-trailer:hover { background: #dc2626; transform: translateY(-1px); }
+
+/* BOTÕES DE COMPRA DE LIVROS (cada loja com a cor da marca).
+   A Estante Virtual ocupa a linha inteira (flex-basis: 100%); Amazon e ML dividem a linha de baixo. */
+.links-livro { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.btn-loja { flex: 1; min-width: 110px; text-align: center; text-decoration: none; color: #fff; padding: 11px 10px; border-radius: 8px; font-weight: bold; font-size: 0.9rem; transition: 0.3s; }
+.btn-loja:hover { filter: brightness(1.15); transform: translateY(-1px); }
+.btn-estante { flex-basis: 100%; background: #0d9488; }
+.btn-amazon { background: #ff9900; color: #111; }
+.btn-ml { background: #ffe600; color: #111; }
+
+
+/* ================= 11. SALAS E CHAT ================= */
+/* Botão "Criar sala" dentro do modal */
+.btn-sala { width: 100%; margin-top: 12px; border: 0; cursor: pointer; background: var(--primary); color: #fff; padding: 12px; border-radius: 8px; font-weight: bold; transition: 0.3s; }
+.btn-sala:hover { background: var(--primary-hover); }
+/* Card de uma sala na lista do painel lateral (gerado por renderSalas() no JS) */
+.sala-card { display: flex; gap: 12px; background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; }
+.sala-card img { width: 70px; border-radius: 8px; object-fit: cover; }
+.sala-card .info { display: flex; flex-direction: column; gap: 4px; font-size: 0.85rem; flex: 1; }
+.sala-card .acoes { display: flex; gap: 6px; margin-top: 6px; }
+.sala-card button { border: 0; cursor: pointer; border-radius: 6px; padding: 6px 10px; font-weight: bold; color: #fff; background: var(--primary); }
+.sala-card button.excluir { background: transparent; border: 1px solid var(--danger); color: var(--danger); }
+/* Área de mensagens do chat: rola por dentro (overflow-y) e empilha as mensagens */
+.chat-msgs { flex: 1; overflow-y: auto; background: #000; border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 6px; margin: 10px 0; }
+.chat-msg { background: var(--input-bg); padding: 6px 10px; border-radius: 8px; max-width: 85%; font-size: 0.9rem; word-break: break-word; }
+/* Mensagem MINHA: alinhada à direita (align-self) e com a cor do tema. A classe "minha" vem do JS. */
+.chat-msg.minha { align-self: flex-end; background: var(--primary); }
+.chat-msg b { display: block; font-size: 0.75rem; opacity: 0.8; } /* nome do autor */
+.chat-form { display: flex; gap: 8px; }
+.chat-form input { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: #fff; }
+.chat-form button { padding: 10px 16px; border: 0; border-radius: 8px; cursor: pointer; }
+
+
+/* ================= 12. LOGO CLICÁVEL ================= */
+/* LOGO CLICÁVEL (volta ao início) */
+.logo-link { display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; cursor: pointer; }
+.logo-img { height: 48px; width: auto; transition: transform 0.3s; }
+.logo-link:hover .logo-img { transform: scale(1.08); } /* logo cresce 8% no hover */
+
+
+/* ================= 13. BOTÃO FLUTUANTE E PAINEL LATERAL ================= */
+/* BOTÃO FLUTUANTE: fixo no canto inferior direito (position: fixed), redondo (border-radius: 50%) */
+.fab-salas { position: fixed; right: 20px; bottom: 20px; width: 64px; height: 64px; border-radius: 50%; border: 2px solid var(--primary); background: var(--panel-bg); cursor: pointer; z-index: 800; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.6); transition: 0.3s; padding: 0; }
+.fab-salas:hover { transform: scale(1.08); background: var(--input-bg); }
+.fab-salas img { width: 40px; height: auto; }
+/* Bolinha vermelha com a contagem de salas (canto superior direito do botão) */
+.badge-salas { position: absolute; top: -4px; right: -4px; background: var(--danger); color: #fff; font-size: 0.75rem; font-weight: bold; min-width: 22px; height: 22px; border-radius: 11px; display: flex; align-items: center; justify-content: center; padding: 0 5px; }
+
+/* PAINEL LATERAL: fica fora da tela (translateX(105%)) e desliza para dentro quando ganha a classe .aberto.
+   O "transition" cria a animação de deslizar. z-index 900: acima da página, abaixo dos modais (1000). */
+.painel-salas { position: fixed; top: 0; right: 0; height: 100vh; width: 380px; max-width: 100%; background: var(--panel-bg); border-left: 1px solid var(--border-color); box-shadow: -6px 0 25px rgba(0,0,0,0.6); z-index: 900; display: flex; flex-direction: column; transform: translateX(105%); transition: transform 0.3s ease; }
+.painel-salas.aberto { transform: translateX(0); }
+.painel-header { display: flex; align-items: center; gap: 8px; padding: 14px 16px; border-bottom: 1px solid var(--border-color); }
+.painel-header h3 { flex: 1; font-size: 1rem; margin: 0; }
+.painel-btn { background: transparent; border: 0; color: var(--text-muted); font-size: 1.6rem; cursor: pointer; line-height: 1; }
+.painel-btn:hover { color: #fff; }
+/* min-height: 0 é necessário para o overflow-y funcionar dentro de um container flex */
+.painel-corpo { flex: 1; display: flex; flex-direction: column; padding: 14px; overflow-y: auto; min-height: 0; }
+.lista-salas { display: flex; flex-direction: column; gap: 12px; }
+.sala-info { font-size: 0.85rem; color: var(--text-muted); margin: 0; }
+
+
+/* ================= 14. TEMAS: FILMES (verde) / LIVROS (laranja) ================= */
+/* @property "registra" a variável como tipo <color>. Sem isso o navegador não
+   consegue ANIMAR a troca de cor (ele só alternaria de uma vez). */
+@property --primary { syntax: '<color>'; inherits: true; initial-value: #00e599; }
+@property --primary-hover { syntax: '<color>'; inherits: true; initial-value: #00c27f; }
+@property --on-primary { syntax: '<color>'; inherits: true; initial-value: #0b0c10; }
+
+/* O body anima a mudança dessas duas variáveis em 0,45s */
+body { transition: --primary 0.45s ease, --primary-hover 0.45s ease; }
+/* O JS troca document.body.dataset.tema ('filmes' ou 'livros'); estas regras
+   redefinem as cores de destaque do site inteiro de uma vez. */
+body[data-tema="filmes"] { --primary: #00e599; --primary-hover: #00c27f; }
+body[data-tema="livros"] { --primary: #f5a623; --primary-hover: #d98f12; }
+
+/* letras da logo e botões com a cor do tema (texto escuro para dar contraste).
+   Estas regras vêm DEPOIS das anteriores, então sobrescrevem o "color: #fff" acima. */
+.logo { color: var(--primary); }
+.btn-search, .btn-primary, .btn-sala, .sala-card button:not(.excluir), .chat-msg.minha { color: #0b0c10; }
+
+/* ABAS COM ANIMAÇÃO (Filmes / Livros) */
+.busca-abas { position: relative; display: flex; max-width: 320px; margin: 0 auto 16px; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 999px; padding: 4px; }
+/* z-index: 1 mantém o texto da aba ACIMA da pílula colorida */
+.aba { flex: 1; position: relative; z-index: 1; background: transparent; border: 0; color: var(--text-muted); padding: 10px; font-weight: bold; font-size: 0.95rem; cursor: pointer; transition: color 0.3s; }
+.aba:hover { color: #fff; }
+.aba.ativa { color: #0b0c10; } /* aba selecionada: texto escuro sobre a pílula colorida */
+/* A "pílula" colorida atrás da aba ativa; ocupa metade da largura */
+.aba-indicador { position: absolute; top: 4px; bottom: 4px; left: 4px; width: calc(50% - 4px); border-radius: 999px; background: var(--primary); transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
+/* No tema "livros" ela desliza 100% para a direita (para baixo da aba Livros) */
+body[data-tema="livros"] .aba-indicador { transform: translateX(100%); }
+
+/* resultados aparecem com um leve fade: começam 8px abaixo e transparentes, depois sobem */
+@keyframes aparecer { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.grid-resultados .card { animation: aparecer 0.35s ease; }
