@@ -54,29 +54,6 @@ O projeto consome diversas APIs públicas para enriquecer os dados:
 ├── logo.png       # Logotipo do projeto
 └── README.md      # Documentação do projeto
 ```
-
----
-
-## ⚙️ Como executar o projeto localmente
-
-1. **Clone o repositório ou baixe os arquivos** para sua máquina.
-2. **Configure o Firebase:**
-   * Crie um projeto no [Console do Firebase](https://console.firebase.google.com/).
-   * Ative o **Realtime Database** e configure as regras de leitura/escrita para permitir acesso (para testes, você pode usar `true`).
-   * No arquivo `script.js`, procure pela constante `FIREBASE_CONFIG` e cole as credenciais do seu projeto:
-     ```javascript
-     const FIREBASE_CONFIG = {
-         apiKey: "SUA_API_KEY",
-         authDomain: "SEU_AUTH_DOMAIN",
-         databaseURL: "SUA_DATABASE_URL",
-         projectId: "SEU_PROJECT_ID",
-         appId: "SEU_APP_ID"
-     };
-     ```
-3. **Execute o projeto:**
-   * Basta abrir o arquivo `index.html` em qualquer navegador moderno.
-   * *Recomendação:* Use uma extensão como o "Live Server" do VS Code para uma melhor experiência de desenvolvimento.
-
 ---
 
 ## 📝 Notas de Desenvolvimento
